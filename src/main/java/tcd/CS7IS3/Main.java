@@ -11,8 +11,12 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        // TODO: Make separate function probably
-        List<String> fileData = Files.readAllLines(Paths.get("topics"), StandardCharsets.UTF_8);
+        ArrayList<TopicModel> topics = loadTopics("topics");
+        System.out.println(topics.get(0));
+    }
+
+    private static ArrayList<TopicModel> loadTopics(String topicPath) throws IOException {
+        List<String> fileData = Files.readAllLines(Paths.get(topicPath), StandardCharsets.UTF_8);
         ArrayList<TopicModel> topics = new ArrayList<TopicModel>();
         String fieldType = "";
         TopicModel topic = new TopicModel();
@@ -40,6 +44,6 @@ public class Main {
                 }
             }
         }
-        System.out.println(topics.get(0));
+        return topics;
     }
 }
