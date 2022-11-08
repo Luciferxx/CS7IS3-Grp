@@ -88,5 +88,22 @@ public class LATimesModel {
         this.type = type;
     }
 
+    public String getCorrection() {
+        return this.correction;
+    }
+
+    public void setCorrection(String correction) {
+        this.correction = correction;
+    }
+
+    public String getCorrectionDate() {
+        return this.correction;
+    }
+
+    public void setCorrectionDate(String correctionDate) {
+        this.correctionDate = correctionDate;
+    }
+
+
 
 }

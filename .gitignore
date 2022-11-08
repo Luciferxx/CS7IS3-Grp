@@ -1,8 +1,4 @@
 Data/
 .vscode/
-
-target/classes/tcd/CS7IS3/*
-target/maven-archiver
-target/maven-status
-
+target/*
 ./index
