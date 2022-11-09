@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.jsoup.nodes.Element;
-
 import tcd.CS7IS3.models.FbisModel;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -51,9 +49,13 @@ public static void parse_all_fbis_files() throws IOException
     }
 
 }    
+public  ArrayList<FbisModel> return_Fbis_Data() throws IOException{
+    parse_all_fbis_files();
+    return fbis_data_list;
+}  
 public static void main(String Args[]) throws IOException
 {
-    parse_all_fbis_files();
+    
     System.out.println(fbis_data_list.size());
 }
 }
