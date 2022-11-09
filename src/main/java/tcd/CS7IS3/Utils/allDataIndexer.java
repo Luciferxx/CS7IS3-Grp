@@ -15,6 +15,10 @@ public class allDataIndexer {
         //@Finn use addAll to add your lucene documents as per dataset to all_data_lucene_document. 
         return all_data_lucene_document;
     }
+    public void Indexer()
+    {
+        //Our Indexer Writer
+    }
     public static void main(String[] args)
     {
         data_indexer();
