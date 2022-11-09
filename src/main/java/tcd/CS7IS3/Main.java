@@ -31,12 +31,12 @@ public class Main {
 
         Directory indexDirectory = FSDirectory.open(Paths.get("./index"));
         IndexWriterConfig iwConfig = new IndexWriterConfig(analyzer);
-        // TODO: look into if this is the right thing we want
-        iwConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
+        iwConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
         iwConfig.setSimilarity(similarity);
         IndexWriter indexWriter = new IndexWriter(indexDirectory, iwConfig);
 
-        indexWriter.addDocuments(createDocuments(topics));
+        // TODO: @Luciferxx Build index using the dataparsers
+        // indexWriter.addDocuments();
 
         indexWriter.close();
     }
@@ -73,16 +73,11 @@ public class Main {
         return topics;
     }
 
-    private static ArrayList<Document> createDocuments(ArrayList<TopicModel> topics) {
-        ArrayList<Document> documents = new ArrayList<>();
+    private static ArrayList<String> createDocuments(ArrayList<TopicModel> topics) {
+        ArrayList<String> queries = new ArrayList<>();
         for(TopicModel topic : topics) {
-            Document document = new Document();
-            document.add(new StringField("number", Integer.toString(topic.getNumber()), Field.Store.YES));
-            document.add(new TextField("title", topic.getTitle(), Field.Store.YES));
-            document.add(new TextField("description", topic.getDescription(), Field.Store.YES));
-            document.add(new TextField("narrative", topic.getNarrative(), Field.Store.YES));
-            documents.add(document);
+            // Do Something
         }
-        return documents;
+        return queries;
     }
 }
