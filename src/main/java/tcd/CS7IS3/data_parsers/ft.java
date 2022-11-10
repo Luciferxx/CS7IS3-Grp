@@ -13,62 +13,63 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class ft {
-private static ArrayList<FtModel> ft_list = new ArrayList<>();   
-private static void  parse_(String parse_doc) throws IOException{
-    FtModel ft_model  = null;
-    File file = new File(parse_doc);
-    Document doc =  Jsoup.parse(file, "UTF-8", "http://example.com/");
-    for (Element e : doc.select("DOC"))
-    {
-        ft_model = new FtModel();
-        ft_model.setDocno(e.select("DOCNO").text());
-        ft_model.setDate(e.select("DATE").text());
-        ft_model.setPub(e.select("PUB").text());
-        ft_model.setPage(e.select("PAGE}").text());
-        ft_model.setText(e.select("TEXT}").text());
-        ft_model.setByline(e.select("BYLINE}").text());
-        ft_model.setDateline(e.select("DATELINE}").text());
-        ft_model.setHeadline(e.select("HEADLINE}").text());
-        ft_model.setProfile(e.select("PROFILE}").text());
-        ft_list.add(ft_model);
-        // System.out.println("###############################################################");
-        // System.out.println();
-        
-        // System.out.println("*************************************************************");
-        // System.out.println(e.select("TEXT").text());
-        // e.select("TEXT").text();
-        // System.out.println("###############################################################");
-    }
-    // System.out.println(latimes.get(287).getDocno());
-}
-public static void parse_all_ft_files() throws IOException
-{
-    File dir = new File("Data/ft");
-    parseAllFiles(dir.getAbsolutePath());
+	private static ArrayList<FtModel> ft_list = new ArrayList<>();
 
-}   
+	private static void parse_(String parse_doc) throws IOException {
+		FtModel ft_model = null;
+		File file = new File(parse_doc);
+		Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
+		for (Element e : doc.select("DOC")) {
+			ft_model = new FtModel();
+			ft_model.setDocno(e.select("DOCNO").text());
+			ft_model.setDate(e.select("DATE").text());
+			ft_model.setPub(e.select("PUB").text());
+			ft_model.setPage(e.select("PAGE}").text());
+			ft_model.setText(e.select("TEXT}").text());
+			ft_model.setByline(e.select("BYLINE}").text());
+			ft_model.setDateline(e.select("DATELINE}").text());
+			ft_model.setHeadline(e.select("HEADLINE}").text());
+			ft_model.setProfile(e.select("PROFILE}").text());
+			ft_list.add(ft_model);
+			// System.out.println("###############################################################");
+			// System.out.println();
 
-public static void parseAllFiles(String path) throws IOException {
- 
-    File root = new File(path);
-    File[] list = root.listFiles();
+			// System.out.println("*************************************************************");
+			// System.out.println(e.select("TEXT").text());
+			// e.select("TEXT").text();
+			// System.out.println("###############################################################");
+		}
+		// System.out.println(latimes.get(287).getDocno());
+	}
 
-    if (list != null) {
-        for (File file : list) {
-            if (file.isDirectory()) {
-                parseAllFiles(file.getAbsolutePath());
-            } else {
-                if(!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt") && !file.getName().contains("Zone.Identifier")) {
-                    parse_(file.getAbsolutePath());
-                }
-            }
-        }
-    }
+	public static void parse_all_ft_files() throws IOException {
+		File dir = new File("Data/ft");
+		parseAllFiles(dir.getAbsolutePath());
 
-}
-public static void main(String Args[]) throws IOException
-{
-    parse_all_ft_files();
-    System.out.println(ft_list.size());
-}
+	}
+
+	public static void parseAllFiles(String path) throws IOException {
+
+		File root = new File(path);
+		File[] list = root.listFiles();
+
+		if (list != null) {
+			for (File file : list) {
+				if (file.isDirectory()) {
+					parseAllFiles(file.getAbsolutePath());
+				} else {
+					if (!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt")
+							&& !file.getName().contains("Zone.Identifier")) {
+						parse_(file.getAbsolutePath());
+					}
+				}
+			}
+		}
+
+	}
+
+	public static void main(String Args[]) throws IOException {
+		parse_all_ft_files();
+		System.out.println(ft_list.size());
+	}
 }
