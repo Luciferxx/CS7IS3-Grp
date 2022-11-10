@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import org.jsoup.nodes.Element;
 
 import tcd.CS7IS3.models.FtModel;
-import tcd.CS7IS3.models.LATimesModel;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class ft {
+	private final static File FT_DIR = new File("Data/ft");
+
 	private static ArrayList<FtModel> ft_list = new ArrayList<>();
 
 	private static void parse_(String parse_doc) throws IOException {
@@ -42,12 +43,6 @@ public class ft {
 		// System.out.println(latimes.get(287).getDocno());
 	}
 
-	public static void parse_all_ft_files() throws IOException {
-		File dir = new File("Data/ft");
-		parseAllFiles(dir.getAbsolutePath());
-
-	}
-
 	public static void parseAllFiles(String path) throws IOException {
 
 		File root = new File(path);
@@ -65,11 +60,15 @@ public class ft {
 				}
 			}
 		}
+	}
 
+	public ArrayList<FtModel> return_data() throws IOException {
+		parseAllFiles(FT_DIR.getAbsolutePath());
+		return ft_list;
 	}
 
 	public static void main(String Args[]) throws IOException {
-		parse_all_ft_files();
+		parseAllFiles(FT_DIR.getAbsolutePath());
 		System.out.println(ft_list.size());
 	}
 }
