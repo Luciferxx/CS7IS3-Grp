@@ -14,9 +14,9 @@ import org.jsoup.nodes.Document;
 public class latimes {
 	private final static File LATIMES_DIR = new File("Data/latimes");
 
-	private static ArrayList<LATimesModel> latimeDataList = new ArrayList<>();
+	private static ArrayList<LATimesModel> latimesDataList = new ArrayList<>();
 
-	private static void parse_(String parseDoc) throws IOException {
+	private static void parseFile(String parseDoc) throws IOException {
 		LATimesModel latimesModel = null;
 		File file = new File(parseDoc);
 		Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
@@ -34,7 +34,7 @@ public class latimes {
 			latimesModel.setType(e.select("TYPE").text());
 			latimesModel.setCorrectionDate(e.select("CORRECTION-DATE").text());
 			latimesModel.setCorrection(e.select("CORRECTION").text());
-			latimeDataList.add(latimesModel);
+			latimesDataList.add(latimesModel);
 			// System.out.println("###############################################################");
 			// System.out.println();
 
@@ -52,13 +52,17 @@ public class latimes {
 			if (!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt"))
 				// System.out.println();
 				System.out.println(file.getName());
-			parse_(file.getAbsolutePath());
+			parseFile(file.getAbsolutePath());
 		}
+	}
 
+	public ArrayList<LATimesModel> getData() throws IOException {
+		parseAllFiles();
+		return latimesDataList;
 	}
 
 	public static void main(String Args[]) throws IOException {
 		parseAllFiles();
-		System.out.println(latimeDataList.size());
+		System.out.println(latimesDataList.size());
 	}
 }
