@@ -12,22 +12,22 @@ import org.jsoup.nodes.Document;
 public class fbis {
 	private final static File FBIS_DIR = new File("Data/fbis");
 
-	private static ArrayList<FbisModel> fbis_data_list = new ArrayList<>();
+	private static ArrayList<FbisModel> fbisDataList = new ArrayList<>();
 
-	private static void parse_(String parse_doc) throws IOException {
-		FbisModel fbis_model = null;
-		File file = new File(parse_doc);
+	private static void parseFile(String parseDoc) throws IOException {
+		FbisModel fbisModel = null;
+		File file = new File(parseDoc);
 		Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
 		for (Element e : doc.select("DOC")) {
-			fbis_model = new FbisModel();
-			fbis_model.setDocno(e.select("DOCNO").text());
-			fbis_model.setDate1(e.select("DATE1").text());
-			fbis_model.setHeader(e.select("HEADER").text());
-			fbis_model.setFig(e.select("FIG").text());
-			fbis_model.setF(e.select("F").text());
-			fbis_model.setTxt5(e.select("TXT5").text());
-			fbis_model.setText(e.select("TXT").text());
-			fbis_data_list.add(fbis_model);
+			fbisModel = new FbisModel();
+			fbisModel.setDocno(e.select("DOCNO").text());
+			fbisModel.setDate1(e.select("DATE1").text());
+			fbisModel.setHeader(e.select("HEADER").text());
+			fbisModel.setFig(e.select("FIG").text());
+			fbisModel.setF(e.select("F").text());
+			fbisModel.setTxt5(e.select("TXT5").text());
+			fbisModel.setText(e.select("TXT").text());
+			fbisDataList.add(fbisModel);
 			// System.out.println("###############################################################");
 			// System.out.println();
 
@@ -39,23 +39,22 @@ public class fbis {
 		// System.out.println(fbis_data_list.get(287).getDocno());
 	}
 
-	public static void parse_all_fbis_files() throws IOException {
-		File[] all_files = FBIS_DIR.listFiles();
-		for (File file : all_files) {
+	public static void parseAllFiles(String path) throws IOException {
+		File[] allFiles = new File(path).listFiles();
+		for (File file : allFiles) {
 			if (!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt"))
 				// System.out.println();
 				System.out.println(file.getName());
-			parse_(file.getAbsolutePath());
+				parseFile(file.getAbsolutePath());
 		}
 	}
 
-	public ArrayList<FbisModel> return_Fbis_Data() throws IOException {
-		parse_all_fbis_files();
-		return fbis_data_list;
+	public ArrayList<FbisModel> getData() throws IOException {
+		parseAllFiles(FBIS_DIR.getAbsolutePath());
+		return fbisDataList;
 	}
 
 	public static void main(String Args[]) throws IOException {
-
-		System.out.println(fbis_data_list.size());
+		System.out.println(fbisDataList.size());
 	}
 }

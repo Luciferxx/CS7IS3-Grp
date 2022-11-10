@@ -12,27 +12,29 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class latimes {
-	private static ArrayList<LATimesModel> latime_list = new ArrayList<>();
+	private final static File LATIMES_DIR = new File("Data/latimes");
 
-	private static void parse_(String parse_doc) throws IOException {
-		LATimesModel latimes_model = null;
-		File file = new File(parse_doc);
+	private static ArrayList<LATimesModel> latimeDataList = new ArrayList<>();
+
+	private static void parse_(String parseDoc) throws IOException {
+		LATimesModel latimesModel = null;
+		File file = new File(parseDoc);
 		Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
 		for (Element e : doc.select("DOC")) {
-			latimes_model = new LATimesModel();
-			latimes_model.setDocno(e.select("DOCNO").text());
-			latimes_model.setDocid(e.select("DOCID").text());
-			latimes_model.setDate(e.select("DATE").text());
-			latimes_model.setSection(e.select("SECTION").text());
-			latimes_model.setLength(e.select("LENGTH").text());
-			latimes_model.setHeadline(e.select("HEADLINE").text());
-			latimes_model.setByline(e.select("BYLINE").text());
-			latimes_model.setText(e.select("TEXT").text());
-			latimes_model.setGraphic(e.select("GRAPHIC").text());
-			latimes_model.setType(e.select("TYPE").text());
-			latimes_model.setCorrectionDate(e.select("CORRECTION-DATE").text());
-			latimes_model.setCorrection(e.select("CORRECTION").text());
-			latime_list.add(latimes_model);
+			latimesModel = new LATimesModel();
+			latimesModel.setDocno(e.select("DOCNO").text());
+			latimesModel.setDocid(e.select("DOCID").text());
+			latimesModel.setDate(e.select("DATE").text());
+			latimesModel.setSection(e.select("SECTION").text());
+			latimesModel.setLength(e.select("LENGTH").text());
+			latimesModel.setHeadline(e.select("HEADLINE").text());
+			latimesModel.setByline(e.select("BYLINE").text());
+			latimesModel.setText(e.select("TEXT").text());
+			latimesModel.setGraphic(e.select("GRAPHIC").text());
+			latimesModel.setType(e.select("TYPE").text());
+			latimesModel.setCorrectionDate(e.select("CORRECTION-DATE").text());
+			latimesModel.setCorrection(e.select("CORRECTION").text());
+			latimeDataList.add(latimesModel);
 			// System.out.println("###############################################################");
 			// System.out.println();
 
@@ -44,10 +46,9 @@ public class latimes {
 		// System.out.println(latimes.get(287).getDocno());
 	}
 
-	public static void parse_all_latimes_files() throws IOException {
-		File dir = new File("Data/latimes");
-		File[] all_files = dir.listFiles();
-		for (File file : all_files) {
+	public static void parseAllFiles() throws IOException {
+		File[] allFiles = LATIMES_DIR.listFiles();
+		for (File file : allFiles) {
 			if (!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt"))
 				// System.out.println();
 				System.out.println(file.getName());
@@ -57,7 +58,7 @@ public class latimes {
 	}
 
 	public static void main(String Args[]) throws IOException {
-		parse_all_latimes_files();
-		System.out.println(latime_list.size());
+		parseAllFiles();
+		System.out.println(latimeDataList.size());
 	}
 }

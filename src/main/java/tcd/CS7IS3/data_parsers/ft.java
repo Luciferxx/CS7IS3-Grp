@@ -14,24 +14,24 @@ import org.jsoup.nodes.Document;
 public class ft {
 	private final static File FT_DIR = new File("Data/ft");
 
-	private static ArrayList<FtModel> ft_list = new ArrayList<>();
+	private static ArrayList<FtModel> ftDataList = new ArrayList<>();
 
-	private static void parse_(String parse_doc) throws IOException {
-		FtModel ft_model = null;
-		File file = new File(parse_doc);
+	private static void parseFile(String parseDoc) throws IOException {
+		FtModel ftModel = null;
+		File file = new File(parseDoc);
 		Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
 		for (Element e : doc.select("DOC")) {
-			ft_model = new FtModel();
-			ft_model.setDocno(e.select("DOCNO").text());
-			ft_model.setDate(e.select("DATE").text());
-			ft_model.setPub(e.select("PUB").text());
-			ft_model.setPage(e.select("PAGE}").text());
-			ft_model.setText(e.select("TEXT}").text());
-			ft_model.setByline(e.select("BYLINE}").text());
-			ft_model.setDateline(e.select("DATELINE}").text());
-			ft_model.setHeadline(e.select("HEADLINE}").text());
-			ft_model.setProfile(e.select("PROFILE}").text());
-			ft_list.add(ft_model);
+			ftModel = new FtModel();
+			ftModel.setDocno(e.select("DOCNO").text());
+			ftModel.setDate(e.select("DATE").text());
+			ftModel.setPub(e.select("PUB").text());
+			ftModel.setPage(e.select("PAGE}").text());
+			ftModel.setText(e.select("TEXT}").text());
+			ftModel.setByline(e.select("BYLINE}").text());
+			ftModel.setDateline(e.select("DATELINE}").text());
+			ftModel.setHeadline(e.select("HEADLINE}").text());
+			ftModel.setProfile(e.select("PROFILE}").text());
+			ftDataList.add(ftModel);
 			// System.out.println("###############################################################");
 			// System.out.println();
 
@@ -55,20 +55,20 @@ public class ft {
 				} else {
 					if (!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt")
 							&& !file.getName().contains("Zone.Identifier")) {
-						parse_(file.getAbsolutePath());
+						parseFile(file.getAbsolutePath());
 					}
 				}
 			}
 		}
 	}
 
-	public ArrayList<FtModel> return_data() throws IOException {
+	public ArrayList<FtModel> getData() throws IOException {
 		parseAllFiles(FT_DIR.getAbsolutePath());
-		return ft_list;
+		return ftDataList;
 	}
 
 	public static void main(String Args[]) throws IOException {
 		parseAllFiles(FT_DIR.getAbsolutePath());
-		System.out.println(ft_list.size());
+		System.out.println(ftDataList.size());
 	}
 }
