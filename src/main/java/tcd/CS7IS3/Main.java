@@ -3,9 +3,6 @@ package tcd.CS7IS3;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -19,6 +16,10 @@ import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+
+import tcd.CS7IS3.Utils.AnalyzerChoice;
+import tcd.CS7IS3.Utils.SimilarityChoice;
+import tcd.CS7IS3.Utils.allDataIndexer;
 import tcd.CS7IS3.models.TopicModel;
 
 import java.io.File;
@@ -27,21 +28,22 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Main {
 	private static String OUTPUT_FILE = "./output/results.txt";
 	private static int MAX_RESULTS = 50;
-
+	static AnalyzerChoice analyzer_choice = new AnalyzerChoice();
+	static SimilarityChoice similarity_choice = new SimilarityChoice();
 	public static void main(String[] args) throws IOException, ParseException {
 		ArrayList<TopicModel> topics = loadTopics("topics");
 
 		Analyzer analyzer = new StandardAnalyzer();
 		Similarity similarity = new ClassicSimilarity();
 
-		Directory indexDirectory = FSDirectory.open(Paths.get("./index"));
+		Directory indexDirectory = FSDirectory.open(Paths.get(LuceneContstants.INDEX_LOC));
 		IndexWriterConfig iwConfig = new IndexWriterConfig(analyzer);
 		iwConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
 		iwConfig.setSimilarity(similarity);
@@ -49,7 +51,8 @@ public class Main {
 
 		// TODO: @Luciferxx Build index using the dataparsers
 		// TODO: Don't forget to include IDs
-		// indexWriter.addDocuments();
+		// allDataIndexer dataIndexer = new allDataIndexer(); 
+		indexWriter.addDocuments(allDataIndexer.dataIndexer());
 
 		DirectoryReader ireader = DirectoryReader.open(indexDirectory);
 		IndexSearcher isearcher = new IndexSearcher(ireader);
@@ -58,7 +61,11 @@ public class Main {
 		 * Boost queries using the common words in the description and the narrative.
 		 * Also boost queries using the title
 		 */
-		MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] { "title", "author", "text" }, analyzer);
+		HashMap<String, Float> boostMap = new HashMap<String, Float>();
+        boostMap.put("Title", 5f); // test
+        boostMap.put("Author", 2f);
+        boostMap.put("Context", 10f);
+		MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] { "title", "author", "text" }, analyzer,boostMap);
 
 		File outputFile = new File(OUTPUT_FILE);
 		PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
