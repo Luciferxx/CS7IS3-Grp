@@ -10,6 +10,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class fbis {
+	private final static File FBIS_DIR = new File("Data/fbis");
+
 	private static ArrayList<FbisModel> fbis_data_list = new ArrayList<>();
 
 	private static void parse_(String parse_doc) throws IOException {
@@ -38,15 +40,13 @@ public class fbis {
 	}
 
 	public static void parse_all_fbis_files() throws IOException {
-		File dir = new File("Data/fbis");
-		File[] all_files = dir.listFiles();
+		File[] all_files = FBIS_DIR.listFiles();
 		for (File file : all_files) {
 			if (!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt"))
 				// System.out.println();
 				System.out.println(file.getName());
 			parse_(file.getAbsolutePath());
 		}
-
 	}
 
 	public ArrayList<FbisModel> return_Fbis_Data() throws IOException {

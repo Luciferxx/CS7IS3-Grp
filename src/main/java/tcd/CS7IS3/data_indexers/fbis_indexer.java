@@ -21,9 +21,7 @@ public class fbis_indexer {
 			for (int i = 0; i < parsed_data.size(); i++) {
 				fbis_lucene_Documents.add(create_Document(parsed_data.get(i)));
 			}
-		} catch (Exception e) {
-
-		}
+		} catch (Exception e) {}
 
 		return fbis_lucene_Documents;
 	}

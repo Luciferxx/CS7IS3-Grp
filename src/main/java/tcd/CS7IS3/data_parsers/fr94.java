@@ -12,6 +12,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class fr94 {
+	private final static File FR94_DIR = new File("Data/fr94");
+
 	private static ArrayList<Fr94Model> fr94_list = new ArrayList<>();
 
 	private static void parse_(String parse_doc) throws IOException {
@@ -49,22 +51,15 @@ public class fr94 {
 			// System.out.println("###############################################################");
 			// System.out.println();
 
-			// System.out.println("*************************************************************");
-			// System.out.println(e.select("TEXT").text());
+			// System.out.println("***************		parse_all_ft_files();
+			// .text());
 			// e.select("TEXT").text();
 			// System.out.println("###############################################################");
 		}
 		// System.out.println(latimes.get(287).getDocno());
 	}
 
-	public static void parse_all_ft_files() throws IOException {
-		File dir = new File("Data/fr94");
-		parseAllFiles(dir.getAbsolutePath());
-
-	}
-
 	public static void parseAllFiles(String path) throws IOException {
-
 		File root = new File(path);
 		File[] list = root.listFiles();
 
@@ -80,11 +75,14 @@ public class fr94 {
 				}
 			}
 		}
+	}
 
+	public ArrayList<Fr94Model> return_data() throws IOException {
+		parseAllFiles(FR94_DIR.getAbsolutePath());
+		return fr94_list;
 	}
 
 	public static void main(String Args[]) throws IOException {
-		parse_all_ft_files();
 		System.out.println(fr94_list.size());
 	}
 }
