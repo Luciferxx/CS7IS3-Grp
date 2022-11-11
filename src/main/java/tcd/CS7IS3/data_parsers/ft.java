@@ -25,12 +25,12 @@ public class ft {
 			ftModel.setDocno(e.select("DOCNO").text());
 			ftModel.setDate(e.select("DATE").text());
 			ftModel.setPub(e.select("PUB").text());
-			ftModel.setPage(e.select("PAGE}").text());
-			ftModel.setText(e.select("TEXT}").text());
-			ftModel.setByline(e.select("BYLINE}").text());
-			ftModel.setDateline(e.select("DATELINE}").text());
-			ftModel.setHeadline(e.select("HEADLINE}").text());
-			ftModel.setProfile(e.select("PROFILE}").text());
+			ftModel.setPage(e.select("PAGE").text());
+			ftModel.setText(e.select("TEXT").text());
+			ftModel.setByline(e.select("BYLINE").text());
+			ftModel.setDateline(e.select("DATELINE").text());
+			ftModel.setHeadline(e.select("HEADLINE").text());
+			ftModel.setProfile(e.select("PROFILE").text());
 			ftDataList.add(ftModel);
 			// System.out.println("###############################################################");
 			// System.out.println();
@@ -53,7 +53,7 @@ public class ft {
 				if (file.isDirectory()) {
 					parseAllFiles(file.getAbsolutePath());
 				} else {
-					if (!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt")
+					if (!file.getName().equals("readmeft") && !file.getName().equals("readmefrcg")
 							&& !file.getName().contains("Zone.Identifier")) {
 						parseFile(file.getAbsolutePath());
 					}

@@ -48,9 +48,6 @@ public class Main {
 		iwConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
 		iwConfig.setSimilarity(similarity);
 		IndexWriter indexWriter = new IndexWriter(indexDirectory, iwConfig);
-
-		// TODO: @Luciferxx Build index using the dataparsers
-		// TODO: Don't forget to include IDs
 		// allDataIndexer dataIndexer = new allDataIndexer(); 
 		indexWriter.addDocuments(allDataIndexer.dataIndexer());
 

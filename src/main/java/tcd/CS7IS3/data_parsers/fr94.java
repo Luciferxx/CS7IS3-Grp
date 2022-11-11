@@ -24,28 +24,28 @@ public class fr94 {
 			fr94Model = new Fr94Model();
 			fr94Model.setDocno(e.select("DOCNO").text());
 			fr94Model.setDate(e.select("DATE").text());
-			fr94Model.setText(e.select("TEXT}").text());
-			fr94Model.setFr(e.select("FR}").text());
-			fr94Model.setFootcite(e.select("FOOTCITE}").text());
-			fr94Model.setCfrno(e.select("CFRNO}").text());
-			fr94Model.setRindock(e.select("RINDOCK}").text());
-			fr94Model.setUsDept(e.select("USDEPT}").text());
-			fr94Model.setUsBureau(e.select("USBUREAU}").text());
-			fr94Model.setImports(e.select("IMPORT}").text());
-			fr94Model.setDoctile(e.select("DOCTITLE}").text());
-			fr94Model.setAgency(e.select("AGENCY}").text());
-			fr94Model.setAction(e.select("ACTION}").text());
-			fr94Model.setSummary(e.select("SUMMARY}").text());
-			fr94Model.setDate(e.select("DATE}").text());
-			fr94Model.setAddress(e.select("ADDRESS}").text());
-			fr94Model.setFurther(e.select("FURTHER}").text());
-			fr94Model.setSupplem(e.select("SUPPLEM}").text());
-			fr94Model.setSigner(e.select("SIGNER}").text());
-			fr94Model.setSignjob(e.select("SIGNJOB}").text());
-			fr94Model.setFrFiling(e.select("FRFILING}").text());
-			fr94Model.setBilling(e.select("BILLING}").text());
-			fr94Model.setFootnote(e.select("FOOTNOTE}").text());
-			fr94Model.setFootname(e.select("FOOTNAME}").text());
+			fr94Model.setText(e.select("TEXT").text());
+			fr94Model.setFr(e.select("FR").text());
+			fr94Model.setFootcite(e.select("FOOTCITE").text());
+			fr94Model.setCfrno(e.select("CFRNO").text());
+			fr94Model.setRindock(e.select("RINDOCK").text());
+			fr94Model.setUsDept(e.select("USDEPT").text());
+			fr94Model.setUsBureau(e.select("USBUREAU").text());
+			fr94Model.setImports(e.select("IMPORT").text());
+			fr94Model.setDoctile(e.select("DOCTITLE").text());
+			fr94Model.setAgency(e.select("AGENCY").text());
+			fr94Model.setAction(e.select("ACTION").text());
+			fr94Model.setSummary(e.select("SUMMARY").text());
+			fr94Model.setDate(e.select("DATE").text());
+			fr94Model.setAddress(e.select("ADDRESS").text());
+			fr94Model.setFurther(e.select("FURTHER").text());
+			fr94Model.setSupplem(e.select("SUPPLEM").text());
+			fr94Model.setSigner(e.select("SIGNER").text());
+			fr94Model.setSignjob(e.select("SIGNJOB").text());
+			fr94Model.setFrFiling(e.select("FRFILING").text());
+			fr94Model.setBilling(e.select("BILLING").text());
+			fr94Model.setFootnote(e.select("FOOTNOTE").text());
+			fr94Model.setFootname(e.select("FOOTNAME").text());
 
 			fr94DataList.add(fr94Model);
 			// System.out.println("###############################################################");
@@ -68,7 +68,7 @@ public class fr94 {
 				if (file.isDirectory()) {
 					parseAllFiles(file.getAbsolutePath());
 				} else {
-					if (!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt")
+					if (!file.getName().equals("readchg") && !file.getName().equals("readmefr")
 							&& !file.getName().contains("Zone.Identifier")) {
 						parseFile(file.getAbsolutePath());
 					}
@@ -77,12 +77,13 @@ public class fr94 {
 		}
 	}
 
-	public ArrayList<Fr94Model> getData() throws IOException {
+	public  ArrayList<Fr94Model> getData() throws IOException {
 		parseAllFiles(FR94_DIR.getAbsolutePath());
 		return fr94DataList;
 	}
 
 	public static void main(String Args[]) throws IOException {
+		// getData();
 		System.out.println(fr94DataList.size());
 	}
 }
