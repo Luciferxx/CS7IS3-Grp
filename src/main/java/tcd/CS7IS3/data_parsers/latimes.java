@@ -49,7 +49,7 @@ public class latimes {
 	public static void parseAllFiles() throws IOException {
 		File[] allFiles = LATIMES_DIR.listFiles();
 		for (File file : allFiles) {
-			if (!file.getName().equals("readchg.txt") && !file.getName().equals("readmela.txt"))
+			if (!file.getName().equals("readchg.txt") && !file.getName().startsWith("readmefb"))
 				// System.out.println();
 				System.out.println(file.getName());
 			parseFile(file.getAbsolutePath());

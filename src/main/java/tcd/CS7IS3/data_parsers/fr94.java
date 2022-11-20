@@ -68,7 +68,7 @@ public class fr94 {
 				if (file.isDirectory()) {
 					parseAllFiles(file.getAbsolutePath());
 				} else {
-					if (!file.getName().equals("readchg") && !file.getName().equals("readmefr")
+					if (!file.getName().equals("readchg") && !file.getName().startsWith("readmefb")
 							&& !file.getName().contains("Zone.Identifier")) {
 						parseFile(file.getAbsolutePath());
 					}
