@@ -53,7 +53,7 @@ public class ft {
 				if (file.isDirectory()) {
 					parseAllFiles(file.getAbsolutePath());
 				} else {
-					if (!file.getName().equals("readmeft") && !file.getName().startsWith("readmefb")
+					if (!file.getName().equals("readmeft") && !file.getName().startsWith("readme")
 							&& !file.getName().contains("Zone.Identifier")) {
 						parseFile(file.getAbsolutePath());
 					}
