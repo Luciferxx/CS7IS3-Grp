@@ -58,7 +58,7 @@ public static void parseAllFiles(String path) throws IOException {
             if (file.isDirectory()) {
                 parseAllFiles(file.getAbsolutePath());
             } else {
-                if(!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt") && !file.getName().contains("Zone.Identifier")) {
+                if(!file.getName().equals("readchg.txt") && !file.getName().startsWith("readme") && !file.getName().contains("Zone.Identifier")) {
                     parse_(file.getAbsolutePath());
                 }
             }

@@ -44,7 +44,7 @@ public static void parse_all_fbis_files() throws IOException
     File[] all_files = dir.listFiles();
     for (File file : all_files)
     {   
-        if(!file.getName().equals("readchg.txt") && !file.getName().equals("readmefb.txt") )
+        if(!file.getName().equals("readchg.txt") && !file.getName().startsWith("readme")
             // System.out.println();
             System.out.println(file.getName());
             parse_(file.getAbsolutePath());
