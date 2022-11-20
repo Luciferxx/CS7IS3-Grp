@@ -42,15 +42,19 @@ public class Main {
 
 		Analyzer analyzer = new StandardAnalyzer();
 		Similarity similarity = new ClassicSimilarity();
-
 		Directory indexDirectory = FSDirectory.open(Paths.get(LuceneContstants.INDEX_LOC));
-		IndexWriterConfig iwConfig = new IndexWriterConfig(analyzer);
-		iwConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
-		iwConfig.setSimilarity(similarity);
-		IndexWriter indexWriter = new IndexWriter(indexDirectory, iwConfig);
+		// Directory directory = FSDirectory.open(Paths.get(LuceneConstants.INDEX_LOC));
+		// DirectoryReader dir_Reader = DirectoryReader.open(directory);
+		// IndexSearcher search_indexer = new IndexSearcher(dir_Reader);
+		// search_indexer.setSimilarity(similarity_chosen);
+		
+		// IndexWriterConfig iwConfig = new IndexWriterConfig(analyzer);
+		// iwConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+		// iwConfig.setSimilarity(similarity);
+		// IndexWriter indexWriter = new IndexWriter(indexDirectory, iwConfig);
 		// allDataIndexer dataIndexer = new allDataIndexer(); 
-		indexWriter.addDocuments(allDataIndexer.dataIndexer());
-
+		// indexWriter.addDocuments(allDataIndexer.dataIndexer());
+		
 		DirectoryReader ireader = DirectoryReader.open(indexDirectory);
 		IndexSearcher isearcher = new IndexSearcher(ireader);
 		// TODO: @Luciferxx update fields
@@ -58,12 +62,43 @@ public class Main {
 		 * Boost queries using the common words in the description and the narrative.
 		 * Also boost queries using the title
 		 */
+		// doc.add(new TextField("Date", fbisData.getDate1(), Field.Store.YES));
+		// doc.add(new TextField("Fig", fbisData.getFig(), Field.Store.YES));
+		// doc.add(new TextField("F", fbisData.getF(), Field.Store.YES));
+		// doc.add(new TextField("Text", fbisData.getText(), Field.Store.YES));
+		// doc.add(new TextField("Txt5", fbisData.getTxt5(), Field.Store.YES));
+		// doc.add(new TextField("Header", fbisData.getHeader(), Field.Store.YES));
+		// doc.add(new TextField("Date", fr94Data.getDate(), Field.Store.YES));
+		// doc.add(new TextField("Text", fr94Data.getText(), Field.Store.YES));
+		// doc.add(new TextField("Fr", fr94Data.getFr(), Field.Store.YES));
+		// doc.add(new TextField("Footcite", fr94Data.getFootcite(), Field.Store.YES));
+		// doc.add(new TextField("Cfrno", fr94Data.getCfrno(), Field.Store.YES));
+		// doc.add(new TextField("Rindock", fr94Data.getRindock(), Field.Store.YES));
+		// doc.add(new TextField("UsDept", fr94Data.getUsDept(), Field.Store.YES));
+		// doc.add(new TextField("UsBureau", fr94Data.getUsBureau(), Field.Store.YES));
+		// doc.add(new TextField("Imports", fr94Data.getImports(), Field.Store.YES));
+		// doc.add(new TextField("Doctile", fr94Data.getDoctile(), Field.Store.YES));
+		// doc.add(new TextField("Agency", fr94Data.getAgency(), Field.Store.YES));
+		// doc.add(new TextField("Action", fr94Data.getAction(), Field.Store.YES));
+		// doc.add(new TextField("Summary", fr94Data.getSummary(), Field.Store.YES));
+		// doc.add(new TextField("Date", fr94Data.getDate(), Field.Store.YES));
+		// doc.add(new TextField("Address,", fr94Data.getAddress(), Field.Store.YES));
+		// doc.add(new TextField("Further", fr94Data.getFurther(), Field.Store.YES));
+		// doc.add(new TextField("Supplem", fr94Data.getSupplem(), Field.Store.YES));
+		// doc.add(new TextField("Signer", fr94Data.getSigner(), Field.Store.YES));
+		// doc.add(new TextField("Signjob", fr94Data.getSignjob(), Field.Store.YES));
+		// doc.add(new TextField("FrFiling", fr94Data.getFrFiling(), Field.Store.YES));
+		// doc.add(new TextField("Billing", fr94Data.getBilling(), Field.Store.YES));
+		// doc.add(new TextField("Footnote", fr94Data.getFootnote(), Field.Store.YES));
+		// doc.add(new TextField("Footname", f
 		HashMap<String, Float> boostMap = new HashMap<String, Float>();
-        boostMap.put("Title", 5f); // test
-        boostMap.put("Author", 2f);
-        boostMap.put("Context", 10f);
-		MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] { "title", "author", "text" }, analyzer,boostMap);
-
+        boostMap.put("Text", 5f); // test
+        boostMap.put("Txt5", 2f);
+        boostMap.put("Header", 7f);
+        boostMap.put("Summary", 6f);
+		boostMap.put("Action", 4f);
+		boostMap.put("F", 3f);
+		MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] { "Text", "Txt5", "Header","Summary","Action","F"}, analyzer,boostMap);
 		File outputFile = new File(OUTPUT_FILE);
 		PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
 		for (TopicModel topic : topics) {
@@ -74,7 +109,7 @@ public class Main {
 			for (ScoreDoc hit : hits) {
 				Document hitDoc = isearcher.doc(hit.doc);
 				// query-id 0 document-id rank score STANDARD
-				writer.println(topic.getNumber() + " 0 " + hitDoc.get("id") + " 0 " + hit.score + " STANDARD");
+				writer.println(topic.getNumber() + " 0 " + hitDoc.get("Id") + " 0 " + hit.score + " STANDARD");
 				i++;
 			}
 		}
@@ -82,7 +117,7 @@ public class Main {
 		ireader.close();
 		indexDirectory.close();
 
-		indexWriter.close();
+		// indexWriter.close();
 	}
 
 	private static ArrayList<TopicModel> loadTopics(String topicPath) throws IOException {

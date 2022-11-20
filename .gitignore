@@ -3,3 +3,4 @@ Data/
 target/*
 ./index
 index/*
+output/*
