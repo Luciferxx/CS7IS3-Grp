@@ -42,7 +42,7 @@ public class fbis {
 	public static void parseAllFiles(String path) throws IOException {
 		File[] allFiles = new File(path).listFiles();
 		for (File file : allFiles) {
-			if (!file.getName().startsWith("read"))
+			if (!file.getName().contains("read"))
 				// System.out.println();
 				System.out.println(file.getName());
 				parseFile(file.getAbsolutePath());
