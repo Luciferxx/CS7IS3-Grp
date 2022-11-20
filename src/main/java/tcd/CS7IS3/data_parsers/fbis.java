@@ -20,14 +20,17 @@ public class fbis {
 		Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
 		for (Element e : doc.select("DOC")) {
 			fbisModel = new FbisModel();
-			fbisModel.setDocno(e.select("DOCNO").text());
+			if(!e.select("DOCNO").text().contains("The datasets"))
+			{
+				fbisModel.setDocno(e.select("DOCNO").text());
 			fbisModel.setDate1(e.select("DATE1").text());
 			fbisModel.setHeader(e.select("HEADER").text());
 			fbisModel.setFig(e.select("FIG").text());
 			fbisModel.setF(e.select("F").text());
 			fbisModel.setTxt5(e.select("TXT5").text());
-			fbisModel.setText(e.select("TXT").text());
+			fbisModel.setText(e.select("TXT").text());	
 			fbisDataList.add(fbisModel);
+		}
 			// System.out.println("###############################################################");
 			// System.out.println();
 

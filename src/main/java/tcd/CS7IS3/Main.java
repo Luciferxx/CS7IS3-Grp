@@ -62,6 +62,8 @@ public class Main {
 		 * Boost queries using the common words in the description and the narrative.
 		 * Also boost queries using the title
 		 */
+		
+		new File("/output/results.txt").mkdirs();
 		HashMap<String, Float> boostMap = new HashMap<String, Float>();
         boostMap.put("Text", 5f); // test
         boostMap.put("Txt5", 2f);

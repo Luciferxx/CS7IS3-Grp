@@ -22,7 +22,8 @@ public class latimes {
 		Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
 		for (Element e : doc.select("DOC")) {
 			latimesModel = new LATimesModel();
-			latimesModel.setDocno(e.select("DOCNO").text());
+			if(!e.select("DOCNO").text().contains("The datasets"))
+			{latimesModel.setDocno(e.select("DOCNO").text());
 			latimesModel.setDocid(e.select("DOCID").text());
 			latimesModel.setDate(e.select("DATE").text());
 			latimesModel.setSection(e.select("SECTION").text());
@@ -34,7 +35,7 @@ public class latimes {
 			latimesModel.setType(e.select("TYPE").text());
 			latimesModel.setCorrectionDate(e.select("CORRECTION-DATE").text());
 			latimesModel.setCorrection(e.select("CORRECTION").text());
-			latimesDataList.add(latimesModel);
+			latimesDataList.add(latimesModel);}
 			// System.out.println("###############################################################");
 			// System.out.println();
 

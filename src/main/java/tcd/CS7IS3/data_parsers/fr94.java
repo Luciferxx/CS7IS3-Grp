@@ -22,7 +22,8 @@ public class fr94 {
 		Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
 		for (Element e : doc.select("DOC")) {
 			fr94Model = new Fr94Model();
-			fr94Model.setDocno(e.select("DOCNO").text());
+			if(!e.select("DOCNO").text().contains("The datasets"))
+			{fr94Model.setDocno(e.select("DOCNO").text());
 			fr94Model.setDate(e.select("DATE").text());
 			fr94Model.setText(e.select("TEXT").text());
 			fr94Model.setFr(e.select("FR").text());
@@ -47,7 +48,7 @@ public class fr94 {
 			fr94Model.setFootnote(e.select("FOOTNOTE").text());
 			fr94Model.setFootname(e.select("FOOTNAME").text());
 
-			fr94DataList.add(fr94Model);
+			fr94DataList.add(fr94Model);}
 			// System.out.println("###############################################################");
 			// System.out.println();
 

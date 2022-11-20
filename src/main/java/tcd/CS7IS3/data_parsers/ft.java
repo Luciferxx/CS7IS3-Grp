@@ -22,7 +22,8 @@ public class ft {
 		Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
 		for (Element e : doc.select("DOC")) {
 			ftModel = new FtModel();
-			ftModel.setDocno(e.select("DOCNO").text());
+			if(!e.select("DOCNO").text().contains("The datasets"))
+			{ftModel.setDocno(e.select("DOCNO").text());
 			ftModel.setDate(e.select("DATE").text());
 			ftModel.setPub(e.select("PUB").text());
 			ftModel.setPage(e.select("PAGE").text());
@@ -31,7 +32,7 @@ public class ft {
 			ftModel.setDateline(e.select("DATELINE").text());
 			ftModel.setHeadline(e.select("HEADLINE").text());
 			ftModel.setProfile(e.select("PROFILE").text());
-			ftDataList.add(ftModel);
+			ftDataList.add(ftModel);}
 			// System.out.println("###############################################################");
 			// System.out.println();
 
