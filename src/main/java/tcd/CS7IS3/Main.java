@@ -31,6 +31,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.BreakIterator;
 import java.util.*;
 
 import org.apache.commons.cli.*;
@@ -107,8 +108,28 @@ public class Main {
             Query descriptionQuery = queryParser.parse(QueryParser.escape(topic.getDescription().trim()));
             booleanQuery.add(new BoostQuery(descriptionQuery, 1.5f), BooleanClause.Occur.SHOULD);
 
-            Query narrativeQuery = queryParser.parse(QueryParser.escape(topic.getNarrative().trim()));
-            booleanQuery.add(new BoostQuery(narrativeQuery, 1.2f), BooleanClause.Occur.SHOULD);
+            // Can contain multiple relevant or irrelevant statements
+            BreakIterator iterator = BreakIterator.getSentenceInstance();
+            String narrative = topic.getNarrative().trim();
+            iterator.setText(narrative);
+            int index = 0;
+            while (index != BreakIterator.DONE) {
+                String sentence = narrative.substring(index, iterator.current());
+                if (sentence.length() > 0) {
+                    if (!sentence.contains("not relevant") && !sentence.contains("irrelevant")) {
+                        Query narrativeQuery = queryParser.parse(QueryParser.escape(sentence));
+                        booleanQuery.add(new BoostQuery(narrativeQuery, 1.2f), BooleanClause.Occur.SHOULD);
+                    } else {
+                        Query narrativeQuery = queryParser.parse(QueryParser.escape(sentence));
+                        booleanQuery.add(new BoostQuery(narrativeQuery, 2f), BooleanClause.Occur.FILTER);
+                    }
+                }
+                index = iterator.next();
+            }
+
+            // This increases the P5 score but decreased the iprec_at_recall_0.50
+//            Query narrativeQuery = queryParser.parse(QueryParser.escape(topic.getNarrative().trim()));
+//            booleanQuery.add(new BoostQuery(narrativeQuery, 1.2f), BooleanClause.Occur.SHOULD);
 
             ScoreDoc[] hits = isearcher.search(booleanQuery.build(), MAX_RESULTS).scoreDocs;
             int i = 0;
