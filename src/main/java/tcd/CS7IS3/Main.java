@@ -20,7 +20,7 @@ import org.apache.lucene.store.FSDirectory;
 
 import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanClause;
 
 import tcd.CS7IS3.Utils.allDataIndexer;
 import tcd.CS7IS3.models.TopicModel;
@@ -44,7 +44,7 @@ public class Main {
     public static void main(String[] args) throws IOException, ParseException, org.apache.commons.cli.ParseException {
         // Defaults for commandline arguments
         Analyzer analyzer = new EnglishAnalyzer();
-        Similarity similarity = new ClassicSimilarity();
+        Similarity similarity = new BM25Similarity();
 
         // Setup command line options
         Options options = new Options();
@@ -80,7 +80,7 @@ public class Main {
         }
         Directory indexDirectory = FSDirectory.open(Paths.get(LuceneContstants.INDEX_LOC));
         if(cmd.hasOption("i") || !DirectoryReader.indexExists(indexDirectory)) {
-            System.out.println("Generated Index");
+            System.out.println("Generating Index");
             allDataIndexer.generateIndex(analyzer, similarity);
         }
 
@@ -89,20 +89,13 @@ public class Main {
         DirectoryReader ireader = DirectoryReader.open(indexDirectory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
         isearcher.setSimilarity(similarity);
-        // TODO: @Luciferxx update fields
-        /*
-         * Boost queries using the common words in the description and the narrative.
-         * Also boost queries using the title
-         */
 
         HashMap<String, Float> boostMap = new HashMap<String, Float>();
-        boostMap.put("Text", 5f);
-        boostMap.put("Txt5", 2f);
-        boostMap.put("Header", 7f);
-        boostMap.put("Summary", 6f);
-        boostMap.put("Action", 4f);
-        boostMap.put("F", 3f);
-        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[]{"Text", "Txt5", "Header", "Summary", "Action", "F"}, analyzer, boostMap);
+        boostMap.put("title", 5f);
+        boostMap.put("content", 7f);
+        boostMap.put("contentExtended", 3f);
+
+        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[]{"title", "content", "contentExtended"}, analyzer, boostMap);
         new File(OUTPUT_DIR).mkdirs();
         File outputFile = new File(OUTPUT_DIR, OUTPUT_FILE);
         PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
@@ -122,7 +115,7 @@ public class Main {
             for (ScoreDoc hit : hits) {
                 Document hitDoc = isearcher.doc(hit.doc);
                 // query-id 0 document-id rank score STANDARD
-                writer.println(topic.getNumber() + " 0 " + hitDoc.get("Id") + " 0 " + hit.score + " STANDARD");
+                writer.println(topic.getNumber() + " 0 " + hitDoc.get("id") + " 0 " + hit.score + " STANDARD");
                 i++;
             }
         }

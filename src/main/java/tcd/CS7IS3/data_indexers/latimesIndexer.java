@@ -28,18 +28,24 @@ public class latimesIndexer {
 
     private Document createDocument(LATimesModel latimesData) {
         Document doc = new Document();
-        doc.add(new StringField("Id", latimesData.getDocno(), Field.Store.YES));
-        doc.add(new TextField("DocID", latimesData.getDocid(), Field.Store.YES));
-        doc.add(new TextField("Date", latimesData.getDate(), Field.Store.YES));
-        doc.add(new TextField("Section", latimesData.getSection(), Field.Store.YES));
-        doc.add(new TextField("Length", latimesData.getLength(), Field.Store.YES));
-        doc.add(new TextField("Headline", latimesData.getHeadline(), Field.Store.YES));
-        doc.add(new TextField("Byline", latimesData.getByline(), Field.Store.YES));
-        doc.add(new TextField("Text", latimesData.getText(), Field.Store.YES));
-        doc.add(new TextField("Graphic", latimesData.getGraphic(), Field.Store.YES));
-        doc.add(new TextField("Type", latimesData.getType(), Field.Store.YES));
-        doc.add(new TextField("CorrectionDate", latimesData.getCorrectionDate(), Field.Store.YES));
-        doc.add(new TextField("Correction", latimesData.getCorrection(), Field.Store.YES));
+        // Important
+        doc.add(new StringField("id", latimesData.getDocno(), Field.Store.YES));
+        doc.add(new TextField("title", latimesData.getHeadline(), Field.Store.YES));
+        doc.add(new TextField("content", latimesData.getText(), Field.Store.YES));
+        doc.add(new TextField("date", latimesData.getDate(), Field.Store.YES));
+
+        // Important and Unique
+        doc.add(new TextField("author", latimesData.getByline(), Field.Store.YES));
+        doc.add(new TextField("section", latimesData.getSection(), Field.Store.YES));
+        doc.add(new TextField("graphicDescription", latimesData.getGraphic(), Field.Store.YES));
+        doc.add(new TextField("type", latimesData.getType(), Field.Store.YES));
+        doc.add(new TextField("correction", latimesData.getCorrection(), Field.Store.YES));
+        doc.add(new TextField("correctionDate", latimesData.getCorrectionDate(), Field.Store.YES));
+
+        // Not Important
+        doc.add(new TextField("docId", latimesData.getDocid(), Field.Store.YES));
+        doc.add(new TextField("wordLength", latimesData.getLength(), Field.Store.YES));
+
         return doc;
     }
 }

@@ -21,6 +21,12 @@ public class fbis {
         Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
         for (Element e : doc.select("DOC")) {
             fbisModel = new FbisModel();
+            for (int i = 1; i <= 8; i ++ ) {
+                String hString = e.select("H" + i).text();
+                if (!hString.isEmpty()) {
+                    fbisModel.setH(hString, i-1);
+                }
+            }
             fbisModel.setDocno(e.select("DOCNO").text());
             fbisModel.setDate1(e.select("DATE1").text());
             fbisModel.setHeader(e.select("HEADER").text());
@@ -44,9 +50,5 @@ public class fbis {
     public ArrayList<FbisModel> getData() throws IOException {
         parseAllFiles(FBIS_DIR.getAbsolutePath());
         return fbisDataList;
-    }
-
-    public static void main(String Args[]) throws IOException {
-        System.out.println(fbisDataList.size());
     }
 }

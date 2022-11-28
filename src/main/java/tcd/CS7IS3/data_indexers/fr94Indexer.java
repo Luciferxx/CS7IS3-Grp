@@ -27,30 +27,35 @@ public class fr94Indexer {
 
     private Document createDocument(Fr94Model fr94Data) {
         Document doc = new Document();
-        doc.add(new StringField("Id", fr94Data.getDocno(), Field.Store.YES));
-        doc.add(new TextField("Date", fr94Data.getDate(), Field.Store.YES));
-        doc.add(new TextField("Text", fr94Data.getText(), Field.Store.YES));
-        doc.add(new TextField("Fr", fr94Data.getFr(), Field.Store.YES));
-        doc.add(new TextField("Footcite", fr94Data.getFootcite(), Field.Store.YES));
-        doc.add(new TextField("Cfrno", fr94Data.getCfrno(), Field.Store.YES));
-        doc.add(new TextField("Rindock", fr94Data.getRindock(), Field.Store.YES));
-        doc.add(new TextField("UsDept", fr94Data.getUsDept(), Field.Store.YES));
-        doc.add(new TextField("UsBureau", fr94Data.getUsBureau(), Field.Store.YES));
-        doc.add(new TextField("Imports", fr94Data.getImports(), Field.Store.YES));
-        doc.add(new TextField("Doctile", fr94Data.getDoctile(), Field.Store.YES));
-        doc.add(new TextField("Agency", fr94Data.getAgency(), Field.Store.YES));
-        doc.add(new TextField("Action", fr94Data.getAction(), Field.Store.YES));
-        doc.add(new TextField("Summary", fr94Data.getSummary(), Field.Store.YES));
-        doc.add(new TextField("Date", fr94Data.getDate(), Field.Store.YES));
-        doc.add(new TextField("Address,", fr94Data.getAddress(), Field.Store.YES));
-        doc.add(new TextField("Further", fr94Data.getFurther(), Field.Store.YES));
-        doc.add(new TextField("Supplem", fr94Data.getSupplem(), Field.Store.YES));
-        doc.add(new TextField("Signer", fr94Data.getSigner(), Field.Store.YES));
-        doc.add(new TextField("Signjob", fr94Data.getSignjob(), Field.Store.YES));
-        doc.add(new TextField("FrFiling", fr94Data.getFrFiling(), Field.Store.YES));
-        doc.add(new TextField("Billing", fr94Data.getBilling(), Field.Store.YES));
-        doc.add(new TextField("Footnote", fr94Data.getFootnote(), Field.Store.YES));
-        doc.add(new TextField("Footname", fr94Data.getFootname(), Field.Store.YES));
+        // Important
+        doc.add(new StringField("id", fr94Data.getDocno(), Field.Store.YES));
+        doc.add(new TextField("title", fr94Data.getDoctitle(), Field.Store.YES));
+        doc.add(new TextField("content", fr94Data.getText(), Field.Store.YES));
+        doc.add(new TextField("contentExtended", fr94Data.getSupplem(), Field.Store.YES));
+        doc.add(new TextField("date", fr94Data.getDate(), Field.Store.YES));
+
+        // Important and Unique
+        doc.add(new TextField("summary", fr94Data.getSummary(), Field.Store.YES));
+        doc.add(new TextField("keyWords", fr94Data.getAction(), Field.Store.YES));
+        doc.add(new TextField("usBureau", fr94Data.getUsBureau(), Field.Store.YES));
+        doc.add(new TextField("usDep", fr94Data.getUsDept(), Field.Store.YES));
+        doc.add(new TextField("agency", fr94Data.getAgency(), Field.Store.YES));
+        doc.add(new TextField("address,", fr94Data.getAddress(), Field.Store.YES));
+        doc.add(new TextField("furtherLinks", fr94Data.getFurther(), Field.Store.YES));
+        doc.add(new TextField("signer", fr94Data.getSigner(), Field.Store.YES));
+        doc.add(new TextField("signjob", fr94Data.getSignjob(), Field.Store.YES));
+        doc.add(new TextField("footnote", fr94Data.getFootnote(), Field.Store.YES));
+        doc.add(new TextField("footname", fr94Data.getFootname(), Field.Store.YES));
+
+        // Not Important
+        doc.add(new TextField("fr", fr94Data.getFr(), Field.Store.YES));
+        doc.add(new TextField("footcite", fr94Data.getFootcite(), Field.Store.YES));
+        doc.add(new TextField("cfrno", fr94Data.getCfrno(), Field.Store.YES));
+        doc.add(new TextField("rindock", fr94Data.getRindock(), Field.Store.YES));
+        doc.add(new TextField("imports", fr94Data.getImports(), Field.Store.YES));
+        doc.add(new TextField("billing", fr94Data.getBilling(), Field.Store.YES));
+        doc.add(new TextField("frFiling", fr94Data.getFrFiling(), Field.Store.YES));
+
         return doc;
     }
 }

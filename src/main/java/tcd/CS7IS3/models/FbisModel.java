@@ -13,6 +13,15 @@ public class FbisModel {
     // Header contains majorly all the tags
     // Text also contains majorly all the tags
     String txt5, date1, fig, header, f;
+    String[] h = new String[8];
+
+    public void setH(String h, int i) {
+        this.h[i] = h;
+    }
+
+    public String getH(int i) {
+        return this.h[i];
+    }
 
     public String getDocno() {
         return this.docno;

@@ -30,13 +30,27 @@ public class fbisIndexer {
 
     private Document createDocument(FbisModel fbisData) {
         Document doc = new Document();
-        doc.add(new StringField("Id", fbisData.getDocno(), Field.Store.YES));
-        doc.add(new TextField("Date", fbisData.getDate1(), Field.Store.YES));
-        doc.add(new TextField("Fig", fbisData.getFig(), Field.Store.YES));
-        doc.add(new TextField("F", fbisData.getF(), Field.Store.YES));
-        doc.add(new TextField("Text", fbisData.getText(), Field.Store.YES));
-        doc.add(new TextField("Txt5", fbisData.getTxt5(), Field.Store.YES));
-        doc.add(new TextField("Header", fbisData.getHeader(), Field.Store.YES));
+        // Important
+        doc.add(new StringField("id", fbisData.getDocno(), Field.Store.YES));
+        doc.add(new TextField("title", fbisData.getHeader(), Field.Store.YES));
+        doc.add(new TextField("content", fbisData.getText(), Field.Store.YES));
+        doc.add(new TextField("contentExtended", fbisData.getTxt5(), Field.Store.YES));
+        doc.add(new TextField("date", fbisData.getDate1(), Field.Store.YES));
+
+        // Important and Unique
+        doc.add(new TextField("f", fbisData.getF(), Field.Store.YES)); // Seems to be subject?
+        doc.add(new TextField("header", fbisData.getHeader(), Field.Store.YES));
+        StringBuilder h = new StringBuilder();
+        for (int i = 1; i <= 8; i ++ ) {
+            String hString = fbisData.getH(i-1);
+            if (!hString.isEmpty()) {
+                h.append(hString).append(" ");
+            }
+        }
+        doc.add(new TextField("h", h.toString(), Field.Store.YES));
+
+        // Not Important
+        doc.add(new TextField("fig", fbisData.getFig(), Field.Store.YES));
         return doc;
     }
 }

@@ -5,7 +5,7 @@ public class Fr94Model {
     // Header contains majorly all the tags
     // Text also contains majorly all the tags
     String footcite, cfrno, rindock, usDept, usBureau, imports,
-            doctile, agency, action, summary, address, further, supplem,
+            doctitle, agency, action, summary, address, further, supplem,
             signer, signjob, frFiling, billing, footnote, footname;
 
     public String getDate() {
@@ -88,12 +88,12 @@ public class Fr94Model {
         this.imports = imports;
     }
 
-    public String getDoctile() {
-        return this.doctile;
+    public String getDoctitle() {
+        return this.doctitle;
     }
 
-    public void setDoctile(String doctile) {
-        this.doctile = doctile;
+    public void setDoctitle(String doctitle) {
+        this.doctitle = doctitle;
     }
 
     public String getAgency() {

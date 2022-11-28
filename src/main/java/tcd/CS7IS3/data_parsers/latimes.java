@@ -43,7 +43,6 @@ public class latimes {
         File[] allFiles = LATIMES_DIR.listFiles();
         for (File file : allFiles) {
             if (!file.getName().contains("read")) {
-                System.out.println(file.getName());
                 parseFile(file.getAbsolutePath());
             }
         }
@@ -52,10 +51,5 @@ public class latimes {
     public ArrayList<LATimesModel> getData() throws IOException {
         parseAllFiles();
         return latimesDataList;
-    }
-
-    public static void main(String Args[]) throws IOException {
-        parseAllFiles();
-        System.out.println(latimesDataList.size());
     }
 }

@@ -28,15 +28,21 @@ public class ftIndexer {
 
     private Document createDocument(FtModel ftData) {
         Document doc = new Document();
-        doc.add(new StringField("Id", ftData.getDocno(), Field.Store.YES));
-        doc.add(new TextField("Date", ftData.getDate(), Field.Store.YES));
-        doc.add(new TextField("Pub", ftData.getPub(), Field.Store.YES));
-        doc.add(new TextField("Page", ftData.getPage(), Field.Store.YES));
-        doc.add(new TextField("Text", ftData.getText(), Field.Store.YES));
-        doc.add(new TextField("Byline", ftData.getByline(), Field.Store.YES));
-        doc.add(new TextField("Dateline", ftData.getDateline(), Field.Store.YES));
-        doc.add(new TextField("Headline", ftData.getHeadline(), Field.Store.YES));
-        doc.add(new TextField("Profile", ftData.getProfile(), Field.Store.YES));
+        // Important
+        doc.add(new StringField("id", ftData.getDocno(), Field.Store.YES));
+        doc.add(new TextField("title", ftData.getHeadline(), Field.Store.YES));
+        doc.add(new TextField("content", ftData.getText(), Field.Store.YES));
+        doc.add(new TextField("date", ftData.getDate(), Field.Store.YES));
+
+        // Important and Unique
+        doc.add(new TextField("author", ftData.getByline(), Field.Store.YES));
+        doc.add(new TextField("pub", ftData.getPub(), Field.Store.YES));
+
+        // Not Important
+        doc.add(new TextField("profile", ftData.getProfile(), Field.Store.YES));
+        doc.add(new TextField("page", ftData.getPage(), Field.Store.YES));
+        doc.add(new TextField("dateline", ftData.getDateline(), Field.Store.YES));
+
         return doc;
     }
 }

@@ -33,7 +33,7 @@ public class fr94 {
             fr94Model.setUsDept(e.select("USDEPT").text());
             fr94Model.setUsBureau(e.select("USBUREAU").text());
             fr94Model.setImports(e.select("IMPORT").text());
-            fr94Model.setDoctile(e.select("DOCTITLE").text());
+            fr94Model.setDoctitle(e.select("DOCTITLE").text());
             fr94Model.setAgency(e.select("AGENCY").text());
             fr94Model.setAction(e.select("ACTION").text());
             fr94Model.setSummary(e.select("SUMMARY").text());
@@ -50,7 +50,6 @@ public class fr94 {
 
             fr94DataList.add(fr94Model);
         }
-        // System.out.println(latimes.get(287).getDocno());
     }
 
     public static void parseAllFiles(String path) throws IOException {
@@ -74,10 +73,5 @@ public class fr94 {
     public ArrayList<Fr94Model> getData() throws IOException {
         parseAllFiles(FR94_DIR.getAbsolutePath());
         return fr94DataList;
-    }
-
-    public static void main(String Args[]) throws IOException {
-        // getData();
-        System.out.println(fr94DataList.size());
     }
 }

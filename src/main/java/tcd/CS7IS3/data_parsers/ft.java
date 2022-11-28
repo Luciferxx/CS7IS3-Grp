@@ -58,9 +58,4 @@ public class ft {
         parseAllFiles(FT_DIR.getAbsolutePath());
         return ftDataList;
     }
-
-    public static void main(String Args[]) throws IOException {
-        parseAllFiles(FT_DIR.getAbsolutePath());
-        System.out.println(ftDataList.size());
-    }
 }

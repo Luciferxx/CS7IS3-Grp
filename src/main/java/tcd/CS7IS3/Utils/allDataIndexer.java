@@ -52,6 +52,5 @@ public class allDataIndexer {
 
     public static void generateIndex(Analyzer analyzer, Similarity similarity) throws IOException {
         Indexer(analyzer, similarity);
-        System.out.println(allDocuments.size());
     }
 }
