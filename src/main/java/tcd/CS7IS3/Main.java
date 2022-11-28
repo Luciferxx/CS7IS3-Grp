@@ -96,7 +96,7 @@ public class Main {
          */
 
         HashMap<String, Float> boostMap = new HashMap<String, Float>();
-        boostMap.put("Text", 5f); // test
+        boostMap.put("Text", 5f);
         boostMap.put("Txt5", 2f);
         boostMap.put("Header", 7f);
         boostMap.put("Summary", 6f);
@@ -107,7 +107,7 @@ public class Main {
         File outputFile = new File(OUTPUT_DIR, OUTPUT_FILE);
         PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
         for (TopicModel topic : topics) {
-            String queryS = QueryParser.escape(topic.getDescription().trim());
+            String queryS = QueryParser.escape(topic.getTitle().trim());
             Query query = queryParser.parse(queryS);
             ScoreDoc[] hits = isearcher.search(query, MAX_RESULTS).scoreDocs;
             int i = 0;
