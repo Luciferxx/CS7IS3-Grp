@@ -92,7 +92,7 @@ public class Main {
 
         HashMap<String, Float> boostMap = new HashMap<String, Float>();
         boostMap.put("title", 5f);
-        boostMap.put("content", 7f);
+        boostMap.put("content", 8f);
         boostMap.put("contentExtended", 3f);
 
         MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[]{"title", "content", "contentExtended"}, analyzer, boostMap);
@@ -102,13 +102,13 @@ public class Main {
         for (TopicModel topic : topics) {
             BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
             Query titleQuery = queryParser.parse(QueryParser.escape(topic.getTitle().trim()));
-            booleanQuery.add(new BoostQuery(titleQuery, (float) 4), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new BoostQuery(titleQuery, 5f), BooleanClause.Occur.SHOULD);
 
             Query descriptionQuery = queryParser.parse(QueryParser.escape(topic.getDescription().trim()));
-            booleanQuery.add(new BoostQuery(descriptionQuery, (float) 1.5), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new BoostQuery(descriptionQuery, 1.5f), BooleanClause.Occur.SHOULD);
 
             Query narrativeQuery = queryParser.parse(QueryParser.escape(topic.getNarrative().trim()));
-            booleanQuery.add(new BoostQuery(narrativeQuery, (float) 1.2), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new BoostQuery(narrativeQuery, 1.2f), BooleanClause.Occur.SHOULD);
 
             ScoreDoc[] hits = isearcher.search(booleanQuery.build(), MAX_RESULTS).scoreDocs;
             int i = 0;
