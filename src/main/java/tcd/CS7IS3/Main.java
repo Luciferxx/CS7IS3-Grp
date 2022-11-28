@@ -13,14 +13,14 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.*;
 import org.apache.lucene.search.similarities.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import org.apache.lucene.search.highlight.*;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.BooleanClause.Occur;
 
 import tcd.CS7IS3.Utils.allDataIndexer;
 import tcd.CS7IS3.models.TopicModel;
@@ -31,9 +31,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.cli.*;
 
@@ -109,9 +107,17 @@ public class Main {
         File outputFile = new File(OUTPUT_DIR, OUTPUT_FILE);
         PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
         for (TopicModel topic : topics) {
-            String queryS = QueryParser.escape(topic.getTitle().trim());
-            Query query = queryParser.parse(queryS);
-            ScoreDoc[] hits = isearcher.search(query, MAX_RESULTS).scoreDocs;
+            BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
+            Query titleQuery = queryParser.parse(QueryParser.escape(topic.getTitle().trim()));
+            booleanQuery.add(new BoostQuery(titleQuery, (float) 4), BooleanClause.Occur.SHOULD);
+
+            Query descriptionQuery = queryParser.parse(QueryParser.escape(topic.getDescription().trim()));
+            booleanQuery.add(new BoostQuery(descriptionQuery, (float) 1.5), BooleanClause.Occur.SHOULD);
+
+            Query narrativeQuery = queryParser.parse(QueryParser.escape(topic.getNarrative().trim()));
+            booleanQuery.add(new BoostQuery(narrativeQuery, (float) 1.2), BooleanClause.Occur.SHOULD);
+
+            ScoreDoc[] hits = isearcher.search(booleanQuery.build(), MAX_RESULTS).scoreDocs;
             int i = 0;
             for (ScoreDoc hit : hits) {
                 Document hitDoc = isearcher.doc(hit.doc);
