@@ -1,6 +1,10 @@
 package tcd.CS7IS3;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.SimpleAnalyzer;
+import org.apache.lucene.analysis.core.StopAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -12,13 +16,10 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.similarities.ClassicSimilarity;
-import org.apache.lucene.search.similarities.Similarity;
+import org.apache.lucene.search.similarities.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
-import tcd.CS7IS3.Utils.AnalyzerChoice;
-import tcd.CS7IS3.Utils.SimilarityChoice;
 import tcd.CS7IS3.Utils.allDataIndexer;
 import tcd.CS7IS3.models.TopicModel;
 
@@ -35,21 +36,55 @@ import java.util.List;
 import org.apache.commons.cli.*;
 
 public class Main {
-    private static String OUTPUT_FILE = "./output/results.txt";
-    private static int MAX_RESULTS = 50;
-    static AnalyzerChoice analyzer_choice = new AnalyzerChoice();
-    static SimilarityChoice similarity_choice = new SimilarityChoice();
 
-    public static void main(String[] args) throws IOException, ParseException {
-        // TODO: @yannickgloster
-        /*
-            Add command line params to run the index creation & check if it already exists
-         */
+    private static String OUTPUT_DIR = "./output";
+    private static String OUTPUT_FILE = "results.txt";
+    private static int MAX_RESULTS = 50;
+
+    public static void main(String[] args) throws IOException, ParseException, org.apache.commons.cli.ParseException {
+        // Defaults for commandline arguments
+        Analyzer analyzer = new EnglishAnalyzer();
+        Similarity similarity = new ClassicSimilarity();
+
+        // Setup command line options
+        Options options = new Options();
+        options.addOption("a", "analyzer", true, "Select Analyzer (standard, whitespace, simple, english)");
+        options.addOption("s", "similarities", true, "Select Similarities (classic, bm25, boolean)");
+        options.addOption("i", "index", false, "Generates index");
+        options.addOption("h", "help", false, "Help");
+
+        // Parse commandline arguments
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(options, args);
+
+        if(cmd.hasOption("h")) {
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("CS7IS3-Grp", options);
+            return;
+        }
+        if(cmd.hasOption("a")) {
+            switch (cmd.getOptionValue("a").toLowerCase()) {
+                case "standard": analyzer = new StandardAnalyzer(); break;
+                case "whitespace": analyzer = new WhitespaceAnalyzer(); break;
+                case "simple": analyzer = new SimpleAnalyzer(); break;
+                case "english": analyzer = new EnglishAnalyzer(); break;
+            }
+        }
+        if(cmd.hasOption("s")) {
+            switch (cmd.getOptionValue("s").toLowerCase()) {
+                case "classic": similarity = new ClassicSimilarity(); break;
+                case "bm25": similarity = new BM25Similarity(); break;
+                case "boolean": similarity = new BooleanSimilarity(); break;
+                case "lmdirichlet": similarity = new LMDirichletSimilarity(); break;
+            }
+        }
+        Directory indexDirectory = FSDirectory.open(Paths.get(LuceneContstants.INDEX_LOC));
+        if(cmd.hasOption("i") || !DirectoryReader.indexExists(indexDirectory)) {
+            System.out.println("Generated Index");
+            allDataIndexer.generateIndex(analyzer, similarity);
+        }
 
         ArrayList<TopicModel> topics = loadTopics("topics");
-        Analyzer analyzer = analyzer_choice.Input_Choice(LuceneContstants.chosen_Analyzer);
-        Similarity similarity = similarity_choice.Input_Choice(LuceneContstants.chosen_Similarity);
-        Directory indexDirectory = FSDirectory.open(Paths.get(LuceneContstants.INDEX_LOC));
 
         DirectoryReader ireader = DirectoryReader.open(indexDirectory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
@@ -60,8 +95,6 @@ public class Main {
          * Also boost queries using the title
          */
 
-        // TODO: @yannickgloster fix the directory creation
-        new File("/output/results.txt").mkdirs();
         HashMap<String, Float> boostMap = new HashMap<String, Float>();
         boostMap.put("Text", 5f); // test
         boostMap.put("Txt5", 2f);
@@ -70,7 +103,8 @@ public class Main {
         boostMap.put("Action", 4f);
         boostMap.put("F", 3f);
         MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[]{"Text", "Txt5", "Header", "Summary", "Action", "F"}, analyzer, boostMap);
-        File outputFile = new File(OUTPUT_FILE);
+        new File(OUTPUT_DIR).mkdirs();
+        File outputFile = new File(OUTPUT_DIR, OUTPUT_FILE);
         PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
         for (TopicModel topic : topics) {
             String queryS = QueryParser.escape(topic.getDescription().trim());
