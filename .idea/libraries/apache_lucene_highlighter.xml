@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="apache.lucene.highlighter" type="repository">
+    <properties maven-id="org.apache.lucene:lucene-highlighter:8.4.1" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-highlighter/8.4.1/lucene-highlighter-8.4.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-core/8.4.1/lucene-core-8.4.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-memory/8.4.1/lucene-memory-8.4.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-queries/8.4.1/lucene-queries-8.4.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

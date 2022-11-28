@@ -20,6 +20,8 @@ import org.apache.lucene.search.similarities.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import org.apache.lucene.search.highlight.*;
+
 import tcd.CS7IS3.Utils.allDataIndexer;
 import tcd.CS7IS3.models.TopicModel;
 
