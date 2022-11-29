@@ -116,11 +116,10 @@ public class Main {
             while (index != BreakIterator.DONE) {
                 String sentence = narrative.substring(index, iterator.current());
                 if (sentence.length() > 0) {
+                    Query narrativeQuery = queryParser.parse(QueryParser.escape(sentence));
                     if (!sentence.contains("not relevant") && !sentence.contains("irrelevant")) {
-                        Query narrativeQuery = queryParser.parse(QueryParser.escape(sentence));
                         booleanQuery.add(new BoostQuery(narrativeQuery, 1.2f), BooleanClause.Occur.SHOULD);
                     } else {
-                        Query narrativeQuery = queryParser.parse(QueryParser.escape(sentence));
                         booleanQuery.add(new BoostQuery(narrativeQuery, 2f), BooleanClause.Occur.FILTER);
                     }
                 }
