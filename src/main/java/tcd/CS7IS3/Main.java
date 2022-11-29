@@ -151,14 +151,10 @@ public class Main {
         indexDirectory.close();
     }
 
-    /*
-    Added to remove stopwords from queries, but it didn't help. Still a usefull function.
-     */
     public static String removeStopWords(String s, List<String> stopwords) {
         ArrayList<String> allWords = Stream.of(s.toLowerCase().split(" ")).collect(Collectors.toCollection(ArrayList<String>::new));
         allWords.removeAll(stopwords);
-        String cleanedString = allWords.stream().collect(Collectors.joining(" "));
-        return cleanedString;
+        return String.join(" ", allWords);
     }
 
     private static ArrayList<TopicModel> loadTopics(String topicPath) throws IOException {
