@@ -100,11 +100,10 @@ public class Main {
         List<String> stopwords = Files.readAllLines(Path.of("./stopwords.txt"));
 
         HashMap<String, Float> boostMap = new HashMap<String, Float>();
-        boostMap.put("title", 5f);
-        boostMap.put("content", 8f);
-        boostMap.put("contentExtended", 3f);
+        boostMap.put("title", 0.08f);
+        boostMap.put("allContent", 0.92f);
 
-        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[]{"title", "content", "contentExtended"}, analyzer, boostMap);
+        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[]{"title", "allContent"}, analyzer, boostMap);
         new File(OUTPUT_DIR).mkdirs();
         File outputFile = new File(OUTPUT_DIR, OUTPUT_FILE);
         PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
@@ -125,19 +124,16 @@ public class Main {
             while (index != BreakIterator.DONE) {
                 String sentence = narrative.substring(index, iterator.current());
                 if (sentence.length() > 0) {
-                    Query narrativeQuery = queryParser.parse(QueryParser.escape(removeStopWords(sentence, stopwords)));
+                    sentence = removeStopWords(sentence, stopwords);
+                    Query narrativeQuery = queryParser.parse(QueryParser.escape(sentence));
                     if (!sentence.contains("not relevant") && !sentence.contains("irrelevant")) {
-                        booleanQuery.add(new BoostQuery(narrativeQuery, 1.2f), BooleanClause.Occur.SHOULD);
+                        booleanQuery.add(new BoostQuery(narrativeQuery, 1.4f), BooleanClause.Occur.SHOULD);
                     } else {
                         booleanQuery.add(new BoostQuery(narrativeQuery, 2f), BooleanClause.Occur.FILTER);
                     }
                 }
                 index = iterator.next();
             }
-
-            // This increases the P5 score but decreased the iprec_at_recall_0.50
-//            Query narrativeQuery = queryParser.parse(QueryParser.escape(topic.getNarrative().trim()));
-//            booleanQuery.add(new BoostQuery(narrativeQuery, 1.2f), BooleanClause.Occur.SHOULD);
 
             ScoreDoc[] hits = isearcher.search(booleanQuery.build(), MAX_RESULTS).scoreDocs;
             for (ScoreDoc hit : hits) {

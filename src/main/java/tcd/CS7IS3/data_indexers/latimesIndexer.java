@@ -46,6 +46,10 @@ public class latimesIndexer {
         doc.add(new TextField("docId", latimesData.getDocid(), Field.Store.YES));
         doc.add(new TextField("wordLength", latimesData.getLength(), Field.Store.YES));
 
+        String allContent = String.join(" ", latimesData.getText(), latimesData.getDate(),
+                latimesData.getByline(), latimesData.getSection(), latimesData.getGraphic(), latimesData.getType(),
+                latimesData.getCorrection(), latimesData.getCorrectionDate());
+        doc.add(new TextField("allContent", allContent, Field.Store.YES));
         return doc;
     }
 }

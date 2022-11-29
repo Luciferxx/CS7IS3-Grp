@@ -56,6 +56,13 @@ public class fr94Indexer {
         doc.add(new TextField("billing", fr94Data.getBilling(), Field.Store.YES));
         doc.add(new TextField("frFiling", fr94Data.getFrFiling(), Field.Store.YES));
 
+        String allContent = String.join(" ", fr94Data.getText(), fr94Data.getSupplem(), fr94Data.getDate(),
+                fr94Data.getSummary(), fr94Data.getAction(), fr94Data.getUsBureau(), fr94Data.getUsDept(),
+                fr94Data.getAgency(), fr94Data.getAddress(), fr94Data.getFurther(), fr94Data.getSigner(),
+                fr94Data.getSignjob(), fr94Data.getFootnote(), fr94Data.getFootname(), fr94Data.getFr(),
+                fr94Data.getFootcite(), fr94Data.getCfrno(), fr94Data.getRindock(), fr94Data.getImports(),
+                fr94Data.getBilling(), fr94Data.getFrFiling());
+        doc.add(new TextField("allContent", allContent, Field.Store.YES));
         return doc;
     }
 }

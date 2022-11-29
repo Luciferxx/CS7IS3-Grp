@@ -43,6 +43,9 @@ public class ftIndexer {
         doc.add(new TextField("page", ftData.getPage(), Field.Store.YES));
         doc.add(new TextField("dateline", ftData.getDateline(), Field.Store.YES));
 
+        String allContent = String.join(" ", ftData.getText(), ftData.getDate(), ftData.getByline(),
+                ftData.getPub(), ftData.getProfile(), ftData.getPage(), ftData.getDateline());
+        doc.add(new TextField("allContent", allContent, Field.Store.YES));
         return doc;
     }
 }

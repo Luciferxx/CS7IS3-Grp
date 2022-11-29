@@ -51,6 +51,10 @@ public class fbisIndexer {
 
         // Not Important
         doc.add(new TextField("fig", fbisData.getFig(), Field.Store.YES));
+
+        String allContent = String.join(" ", fbisData.getText(), fbisData.getTxt5(), fbisData.getF(),
+                fbisData.getHeader(), h.toString(), fbisData.getFig());
+        doc.add(new TextField("allContent", allContent, Field.Store.YES));
         return doc;
     }
 }
