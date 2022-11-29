@@ -22,6 +22,7 @@ import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanClause;
 
+import java.nio.file.Path;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -94,6 +95,10 @@ public class Main {
         IndexSearcher isearcher = new IndexSearcher(ireader);
         isearcher.setSimilarity(similarity);
 
+        // http://www.lextek.com/manuals/onix/stopwords1.html
+        // https://gist.github.com/larsyencken/1440509
+        List<String> stopwords = Files.readAllLines(Path.of("./stopwords.txt"));
+
         HashMap<String, Float> boostMap = new HashMap<String, Float>();
         boostMap.put("title", 5f);
         boostMap.put("content", 8f);
@@ -109,8 +114,8 @@ public class Main {
             Query titleQuery = queryParser.parse(QueryParser.escape(topic.getTitle().trim()));
             booleanQuery.add(new BoostQuery(titleQuery, 5f), BooleanClause.Occur.SHOULD);
 
-            Query descriptionQuery = queryParser.parse(QueryParser.escape(topic.getDescription().trim()));
-            booleanQuery.add(new BoostQuery(descriptionQuery, 1.5f), BooleanClause.Occur.SHOULD);
+            Query descriptionQuery = queryParser.parse(QueryParser.escape(removeStopWords(topic.getDescription().trim(), stopwords)));
+            booleanQuery.add(new BoostQuery(descriptionQuery, 4f), BooleanClause.Occur.SHOULD);
 
             // Can contain multiple relevant or irrelevant statements
             BreakIterator iterator = BreakIterator.getSentenceInstance();
@@ -120,7 +125,7 @@ public class Main {
             while (index != BreakIterator.DONE) {
                 String sentence = narrative.substring(index, iterator.current());
                 if (sentence.length() > 0) {
-                    Query narrativeQuery = queryParser.parse(QueryParser.escape(sentence));
+                    Query narrativeQuery = queryParser.parse(QueryParser.escape(removeStopWords(sentence, stopwords)));
                     if (!sentence.contains("not relevant") && !sentence.contains("irrelevant")) {
                         booleanQuery.add(new BoostQuery(narrativeQuery, 1.2f), BooleanClause.Occur.SHOULD);
                     } else {
@@ -135,12 +140,10 @@ public class Main {
 //            booleanQuery.add(new BoostQuery(narrativeQuery, 1.2f), BooleanClause.Occur.SHOULD);
 
             ScoreDoc[] hits = isearcher.search(booleanQuery.build(), MAX_RESULTS).scoreDocs;
-            int i = 0;
             for (ScoreDoc hit : hits) {
                 Document hitDoc = isearcher.doc(hit.doc);
                 // query-id 0 document-id rank score STANDARD
                 writer.println(topic.getNumber() + " 0 " + hitDoc.get("id") + " 0 " + hit.score + " STANDARD");
-                i++;
             }
         }
         writer.close();
@@ -152,9 +155,10 @@ public class Main {
     Added to remove stopwords from queries, but it didn't help. Still a usefull function.
      */
     public static String removeStopWords(String s, List<String> stopwords) {
-        ArrayList<String> allWords = Stream.of(s.split(" ")).collect(Collectors.toCollection(ArrayList<String>::new));
+        ArrayList<String> allWords = Stream.of(s.toLowerCase().split(" ")).collect(Collectors.toCollection(ArrayList<String>::new));
         allWords.removeAll(stopwords);
-        return allWords.stream().collect(Collectors.joining(" "));
+        String cleanedString = allWords.stream().collect(Collectors.joining(" "));
+        return cleanedString;
     }
 
     private static ArrayList<TopicModel> loadTopics(String topicPath) throws IOException {

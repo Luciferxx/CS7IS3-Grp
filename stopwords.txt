@@ -1,9 +1,3 @@
-#
-#  stopwords.txt
-#
-#  Freely available stopword list, balancing coverage and size.
-#
-#  From http://www.lextek.com/manuals/onix/stopwords1.html
 a
 about
 above
