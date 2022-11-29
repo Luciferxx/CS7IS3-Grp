@@ -22,6 +22,9 @@ import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanClause;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import tcd.CS7IS3.Utils.allDataIndexer;
 import tcd.CS7IS3.models.TopicModel;
 
@@ -102,6 +105,7 @@ public class Main {
         PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
         for (TopicModel topic : topics) {
             BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
+
             Query titleQuery = queryParser.parse(QueryParser.escape(topic.getTitle().trim()));
             booleanQuery.add(new BoostQuery(titleQuery, 5f), BooleanClause.Occur.SHOULD);
 
@@ -142,6 +146,15 @@ public class Main {
         writer.close();
         ireader.close();
         indexDirectory.close();
+    }
+
+    /*
+    Added to remove stopwords from queries, but it didn't help. Still a usefull function.
+     */
+    public static String removeStopWords(String s, List<String> stopwords) {
+        ArrayList<String> allWords = Stream.of(s.split(" ")).collect(Collectors.toCollection(ArrayList<String>::new));
+        allWords.removeAll(stopwords);
+        return allWords.stream().collect(Collectors.joining(" "));
     }
 
     private static ArrayList<TopicModel> loadTopics(String topicPath) throws IOException {
