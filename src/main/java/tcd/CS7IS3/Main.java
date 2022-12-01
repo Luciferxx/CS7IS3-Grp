@@ -21,6 +21,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.queries.mlt.MoreLikeThisQuery;
 
 import java.nio.file.Path;
 import java.util.stream.Collectors;
@@ -135,6 +136,12 @@ public class Main {
                 index = iterator.next();
             }
 
+            ArrayList<Query> expandedQueries = expandQuery(isearcher, analyzer, ireader, booleanQuery.build());
+
+            for (Query expandedQuery : expandedQueries) {
+                booleanQuery.add(expandedQuery, BooleanClause.Occur.SHOULD);
+            }
+
             ScoreDoc[] hits = isearcher.search(booleanQuery.build(), MAX_RESULTS).scoreDocs;
             for (ScoreDoc hit : hits) {
                 Document hitDoc = isearcher.doc(hit.doc);
@@ -147,7 +154,21 @@ public class Main {
         indexDirectory.close();
     }
 
-    public static String removeStopWords(String s, List<String> stopwords) {
+    private static ArrayList<Query> expandQuery(IndexSearcher isearcher, Analyzer analyzer, DirectoryReader ireader,
+                                                Query query) throws IOException {
+        ArrayList<Query> expandedQueries = new ArrayList<>();
+        ScoreDoc[] hits = isearcher.search(query, 10).scoreDocs;
+        for (ScoreDoc hit : hits) {
+            Document hitDoc = ireader.document(hit.doc);
+            String field = hitDoc.getField("allContent").stringValue();
+            MoreLikeThisQuery mltqExpanded = new MoreLikeThisQuery(field, new String[]{"allContent"}, analyzer, "allContent");
+            Query expandedQuery = mltqExpanded.rewrite(ireader);
+            expandedQueries.add(expandedQuery);
+        }
+        return expandedQueries;
+    }
+
+    private static String removeStopWords(String s, List<String> stopwords) {
         ArrayList<String> allWords = Stream.of(s.toLowerCase().split(" ")).collect(Collectors.toCollection(ArrayList<String>::new));
         allWords.removeAll(stopwords);
         return String.join(" ", allWords);
