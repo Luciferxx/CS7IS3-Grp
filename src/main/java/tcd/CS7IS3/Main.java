@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import tcd.CS7IS3.Utils.allDataIndexer;
+import tcd.CS7IS3.Utils.customAnalyzer;
 import tcd.CS7IS3.models.TopicModel;
 
 import java.io.File;
@@ -46,6 +47,7 @@ public class Main {
     private static String OUTPUT_DIR = "./output";
     private static String OUTPUT_FILE = "results.txt";
     private static int MAX_RESULTS = 50;
+    public static String STOPWORD_PATH = "./stopwords.txt";
 
     public static void main(String[] args) throws IOException, ParseException, org.apache.commons.cli.ParseException {
         // Defaults for commandline arguments
@@ -54,7 +56,7 @@ public class Main {
 
         // Setup command line options
         Options options = new Options();
-        options.addOption("a", "analyzer", true, "Select Analyzer (standard, whitespace, simple, english)");
+        options.addOption("a", "analyzer", true, "Select Analyzer (standard, whitespace, simple, english, custom)");
         options.addOption("s", "similarities", true, "Select Similarities (classic, bm25, boolean)");
         options.addOption("i", "index", false, "Generates index");
         options.addOption("h", "help", false, "Help");
@@ -74,6 +76,7 @@ public class Main {
                 case "whitespace": analyzer = new WhitespaceAnalyzer(); break;
                 case "simple": analyzer = new SimpleAnalyzer(); break;
                 case "english": analyzer = new EnglishAnalyzer(); break;
+                case "custom": analyzer = new customAnalyzer(); break;
             }
         }
         if(cmd.hasOption("s")) {
@@ -98,7 +101,7 @@ public class Main {
 
         // http://www.lextek.com/manuals/onix/stopwords1.html
         // https://gist.github.com/larsyencken/1440509
-        List<String> stopwords = Files.readAllLines(Path.of("./stopwords.txt"));
+        List<String> stopwords = Files.readAllLines(Path.of(STOPWORD_PATH));
 
         HashMap<String, Float> boostMap = new HashMap<String, Float>();
         boostMap.put("title", 0.08f);
