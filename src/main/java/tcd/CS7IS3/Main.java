@@ -160,7 +160,7 @@ public class Main {
     private static ArrayList<Query> expandQuery(IndexSearcher isearcher, Analyzer analyzer, DirectoryReader ireader,
                                                 Query query) throws IOException {
         ArrayList<Query> expandedQueries = new ArrayList<>();
-        ScoreDoc[] hits = isearcher.search(query, 10).scoreDocs;
+        ScoreDoc[] hits = isearcher.search(query, 12).scoreDocs;
         for (ScoreDoc hit : hits) {
             Document hitDoc = ireader.document(hit.doc);
             String field = hitDoc.getField("allContent").stringValue();
