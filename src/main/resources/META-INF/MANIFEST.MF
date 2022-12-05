@@ -1,3 +1,9 @@
 Manifest-Version: 1.0
 Main-Class: tcd.CS7IS3.Main
+Class-Path: commons-cli-1.5.0.jar lucene-analyzers-common-8.4.1.jar luce
+ ne-sandbox-8.4.1.jar jsoup-1.15.3.jar lucene-queries-8.4.1.jar lucene-h
+ ighlighter-8.4.1.jar lucene-core-8.4.1.jar lucene-queryparser-8.4.1.jar
+  lucene-highlighter-8.4.1.jar lucene-core-8.4.1.jar lucene-memory-8.4.1
+ .jar lucene-queries-8.4.1.jar commons-cli-1.5.0.jar lucene-memory-8.4.1
+ .jar
 
