@@ -93,6 +93,7 @@ public class Main {
             allDataIndexer.generateIndex(analyzer, similarity);
         }
 
+        System.out.println("Loading Topics");
         ArrayList<TopicModel> topics = loadTopics("topics");
 
         DirectoryReader ireader = DirectoryReader.open(indexDirectory);
@@ -111,6 +112,7 @@ public class Main {
         new File(OUTPUT_DIR).mkdirs();
         File outputFile = new File(OUTPUT_DIR, OUTPUT_FILE);
         PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
+        System.out.println("Running Queries");
         for (TopicModel topic : topics) {
             BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
 
@@ -152,6 +154,8 @@ public class Main {
                 writer.println(topic.getNumber() + " 0 " + hitDoc.get("id") + " 0 " + hit.score + " STANDARD");
             }
         }
+
+        System.out.println("Saving Results");
         writer.close();
         ireader.close();
         indexDirectory.close();
