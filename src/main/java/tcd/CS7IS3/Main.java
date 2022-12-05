@@ -46,7 +46,7 @@ public class Main {
 
     private static String OUTPUT_DIR = "./output";
     private static String OUTPUT_FILE = "results.txt";
-    private static int MAX_RESULTS = 50;
+    private static int MAX_RESULTS = 1000;
     public static String STOPWORD_PATH = "./stopwords.txt";
 
     public static void main(String[] args) throws IOException, ParseException, org.apache.commons.cli.ParseException {
@@ -89,7 +89,7 @@ public class Main {
         }
         Directory indexDirectory = FSDirectory.open(Paths.get(LuceneContstants.INDEX_LOC));
         if(cmd.hasOption("i") || !DirectoryReader.indexExists(indexDirectory)) {
-            System.out.println("Generating Index");
+            System.out.println("Generating index...");
             allDataIndexer.generateIndex(analyzer, similarity);
         }
 
@@ -125,7 +125,7 @@ public class Main {
             String narrative = topic.getNarrative().trim();
             iterator.setText(narrative);
             int index = 0;
-            while (index != BreakIterator.DONE) {
+            while (iterator.next() != BreakIterator.DONE) {
                 String sentence = narrative.substring(index, iterator.current());
                 if (sentence.length() > 0) {
                     sentence = removeStopWords(sentence, stopwords);
@@ -136,7 +136,7 @@ public class Main {
                         booleanQuery.add(new BoostQuery(narrativeQuery, 2f), BooleanClause.Occur.FILTER);
                     }
                 }
-                index = iterator.next();
+                index = iterator.current();
             }
 
             ArrayList<Query> expandedQueries = expandQuery(isearcher, analyzer, ireader, booleanQuery.build());

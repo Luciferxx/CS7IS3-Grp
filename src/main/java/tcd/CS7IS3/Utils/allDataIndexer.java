@@ -47,7 +47,7 @@ public class allDataIndexer {
         //Add the documents parsed from the dataset into the indexWriter
         indexWriter.addDocuments(allDocuments);
         indexWriter.close();
-        System.out.println(String.valueOf(allDocuments.size()) + " documents have been indexed \n Indexing complete");
+        System.out.println(String.valueOf(allDocuments.size()) + " documents have been indexed \nIndexing complete");
     }
 
     public static void generateIndex(Analyzer analyzer, Similarity similarity) throws IOException {

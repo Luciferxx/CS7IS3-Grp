@@ -4,3 +4,4 @@ target/*
 ./index
 index/*
 output/*
+trec_eval/*
